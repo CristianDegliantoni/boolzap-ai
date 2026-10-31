@@ -74,12 +74,12 @@ img {
 	box-shadow: 3px 3px 10px #00000080;
 }
 
-.chat-row.sent {
+.sent {
 	justify-content: flex-end;
 	padding-left: 1rem;
 }
 
-.chat-row.received {
+.received {
 	justify-content: flex-start;
 	padding-right: 1rem;
 }
