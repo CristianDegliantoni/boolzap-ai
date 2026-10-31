@@ -1,9 +1,10 @@
-// preparazione dom
+/******************** PREPARAZIONE DOM ***********************/
 const chatBoxEl = document.querySelector("#chat-box");
 const inputEl = document.querySelector("input");
 const buttonEl = document.querySelector("button");
 
-// preparazione dati
+
+/********************* PREPARAZIONE DATI *********************/
 const messages = [
 	{
 		text: 'Ciao, come va?',
@@ -17,40 +18,23 @@ const messages = [
 	}
 ];
 
-chatBoxEl.innerHTML = "";
 
-// renderizza una card per ogni messaggio
-for (const messaggio of messages) {
+/*********************** PAGE INIT ED EVENTI *****************/
+showMessages();
 
-	chatBoxEl.innerHTML += `
-			<div class="chat-row ${messaggio.type}">
-				<div class="chat-message">
-					<p>${messaggio.text}</p>
-					<time datetime="18/11/2025 11:34:00">
-						${messaggio.time}
-					</time>
-				</div>
-			</div>
-	`;
+inputEl.addEventListener("keyup", function (event) {
+	if (event.key == "Enter") {
+		sendMessage();
+	}
+});
 
-}
+buttonEl.addEventListener("click", sendMessage);
 
-buttonEl.addEventListener("click", function () {
 
-	const inputText = inputEl.value.trim();
+/******************** FUNCTIONS ******************************/
 
-	const adesso = new Date();
-	const tempoStringa = adesso.toLocaleString();
-
-	const newMessage = {
-		text: inputText,
-		time: tempoStringa,
-		type: "sent",
-	};
-
-	messages.push(newMessage);
-
-	console.log("Messaggio inviato", newMessage);
+//In base ad array messaggi, renderizza le cards
+function showMessages() {
 
 	chatBoxEl.innerHTML = "";
 
@@ -70,7 +54,44 @@ buttonEl.addEventListener("click", function () {
 
 	}
 
+	chatBoxEl.scrollTop = chatBoxEl.scrollHeight;
+
+}
+
+//Recupera input utente e chiama addMessage()
+function sendMessage() {
+
+	// recupero cosa l'utente ha scritto in <input>
+	const inputText = inputEl.value.trim();
+
+	// se non ha scritto nulla, non facciamo nulla
+	if (inputText == "") {
+		//return = la funzione ha terminato
+		return;
+	}
+
+	addMessage(inputText, "sent");
+
 	inputEl.value = "";
 	inputEl.focus();
 
-});
+	//ToDo: chiama api per risposta!
+}
+
+//In base al testo e tipo di messaggio, crea oggetto e chiama showMessages(); 
+function addMessage(messageText, messageType) {
+
+	const adesso = new Date();
+	const tempoStringa = adesso.toLocaleString();
+
+	const newMessage = {
+		text: messageText,
+		time: tempoStringa,
+		type: messageType,
+	};
+
+	messages.push(newMessage);
+
+	showMessages();
+
+}
