@@ -2,9 +2,15 @@
 const chatBoxEl = document.querySelector("#chat-box");
 const inputEl = document.querySelector("input");
 const buttonEl = document.querySelector("button");
+const contactStatusEl = document.querySelector('.contact-status')
 
 
 /********************* PREPARAZIONE DATI *********************/
+//ToDo: spostare i dati in apiConfig.js
+//ToDo: untangle functions chain
+const apiUrl = "https://openrouter.ai/api/v1/chat/completions";
+const apiKey = "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";
+
 const messages = [
 	{
 		text: 'Ciao, come va?',
@@ -17,7 +23,6 @@ const messages = [
 		type: 'received'
 	}
 ];
-
 
 /*********************** PAGE INIT ED EVENTI *****************/
 showMessages();
@@ -99,26 +104,24 @@ function addMessage(messageText, messageType) {
 //Chiama la webapi di openrouter e ottiene una risposta
 function getAnswer() {
 
-	const datiPerOpenRouter = formatDataForOpenRouter();
+	// Mostro lo stato nella UI
+	contactStatusEl.innerText = 'Sta scrivendo...'
 
-	console.log("Chiedo risposta per: ", datiPerOpenRouter);
-
-	const apiUrl = "https://openrouter.ai/api/v1/chat/completions";
+	//ToDo: spostare
 	const requestConfig = {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
-			"Authorization": "Bearer ILTUOTOKENVAQUI"
+			"Authorization": `Bearer ${apiKey}`
 		},
 		body: JSON.stringify({
 			model: "openai/gpt-4o-mini",
-			messages: datiPerOpenRouter
+			messages: formatDataForOpenRouter()
 		})
 	};
 
+	//ToDo: controllare response.ok e gestire errori
 	fetch(apiUrl, requestConfig).then(response => {
-		console.log(response);
-
 		return response.json();
 	}).then(data => {
 
@@ -126,6 +129,7 @@ function getAnswer() {
 		console.log(risposta);
 
 		addMessage(risposta, "received");
+		contactStatusEl.innerText = 'Online 🟢';
 	});
 
 
