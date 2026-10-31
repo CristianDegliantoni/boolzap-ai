@@ -75,7 +75,7 @@ function sendMessage() {
 	inputEl.value = "";
 	inputEl.focus();
 
-	//ToDo: chiama api per risposta!
+	getAnswer();
 }
 
 //In base al testo e tipo di messaggio, crea oggetto e chiama showMessages(); 
@@ -94,4 +94,69 @@ function addMessage(messageText, messageType) {
 
 	showMessages();
 
+}
+
+//Chiama la webapi di openrouter e ottiene una risposta
+function getAnswer() {
+
+	const datiPerOpenRouter = formatDataForOpenRouter();
+
+	console.log("Chiedo risposta per: ", datiPerOpenRouter);
+
+	const apiUrl = "https://openrouter.ai/api/v1/chat/completions";
+	const requestConfig = {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+			"Authorization": "Bearer ILTUOTOKENVAQUI"
+		},
+		body: JSON.stringify({
+			model: "openai/gpt-4o-mini",
+			messages: datiPerOpenRouter
+		})
+	};
+
+	fetch(apiUrl, requestConfig).then(response => {
+		console.log(response);
+
+		return response.json();
+	}).then(data => {
+
+		const risposta = data.choices[0].message.content;
+		console.log(risposta);
+
+		addMessage(risposta, "received");
+	});
+
+
+}
+
+function formatDataForOpenRouter() {
+	const results = [
+		{
+			role: "system",
+			content: "Sei Silvia, un'amica che risponde in modo amichevole e informale. Rispondi in italiano, con un tono cordiale e naturale, come farebbe un'amica in una chat. Mantieni le risposte brevi e spontanee."
+		}
+	];
+
+	/* array di oggetti. ogni oggetto ha proprietà role e content */
+	/* ogni oggetto rappresenta un prompt */
+
+	for (const messaggio of messages) {
+
+		const oggettoFormattato = {
+			content: messaggio.text,
+		};
+
+		if (messaggio.type == "sent") {
+			oggettoFormattato.role = "user";
+		} else {
+			oggettoFormattato.role = "assistant";
+		}
+
+		results.push(oggettoFormattato);
+
+	}
+
+	return results;
 }
