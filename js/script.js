@@ -27,6 +27,13 @@ const defaultMessages = [
 const savedMessages = localStorage.getItem("boolzap_messages");
 const messages = savedMessages ? JSON.parse(savedMessages) : defaultMessages;
 
+//sarebbe l'equivalente di un if else  let messages;
+//if (savedMessages) {
+//   messages = JSON.parse(savedMessages);
+//} else {
+//  messages = defaultMessages;
+//} 
+
 /*********************** PAGE INIT ED EVENTI *****************/
 showMessages();
 
