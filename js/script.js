@@ -10,7 +10,7 @@ const contactStatusEl = document.querySelector('.contact-status');
 //ToDo: untangle functions chain
 const apiUrl = "https://openrouter.ai/api/v1/chat/completions";
 
-const messages = [
+const defaultMessages = [
 	{
 		text: 'Ciao! Mi aiuti a studiare?',
 		time: '31/10/2026 11:00:00',
@@ -22,6 +22,10 @@ const messages = [
 		type: 'received'
 	}
 ];
+
+// Recupera i messaggi precedentemente salvati nel localStorage, se presenti
+const savedMessages = localStorage.getItem("boolzap_messages");
+const messages = savedMessages ? JSON.parse(savedMessages) : defaultMessages;
 
 /*********************** PAGE INIT ED EVENTI *****************/
 showMessages();
@@ -95,6 +99,9 @@ function addMessage(messageText, messageType) {
 	};
 
 	messages.push(newMessage);
+
+	// Salva i messaggi aggiornati nel localStorage
+	localStorage.setItem("boolzap_messages", JSON.stringify(messages));
 
 	showMessages();
 
