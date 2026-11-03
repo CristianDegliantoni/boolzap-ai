@@ -2,7 +2,7 @@
 const chatBoxEl = document.querySelector("#chat-box");
 const inputEl = document.querySelector("input");
 const buttonEl = document.querySelector("button");
-const contactStatusEl = document.querySelector('.contact-status')
+const contactStatusEl = document.querySelector('.contact-status');
 
 
 /********************* PREPARAZIONE DATI *********************/
@@ -12,12 +12,12 @@ const apiUrl = "https://openrouter.ai/api/v1/chat/completions";
 
 const messages = [
 	{
-		text: 'Ciao, come va?',
+		text: 'Ciao! Mi aiuti a studiare?',
 		time: '31/10/2026 11:00:00',
 		type: 'sent'
 	},
 	{
-		text: 'Tutto bene, e tu?',
+		text: 'Certamente! Quale argomento o materia vuoi affrontare oggi?',
 		time: '31/10/2026 11:00:01',
 		type: 'received'
 	}
@@ -104,7 +104,7 @@ function addMessage(messageText, messageType) {
 function getAnswer() {
 
 	// Mostro lo stato nella UI
-	contactStatusEl.innerText = 'Sta scrivendo...'
+	contactStatusEl.innerText = 'Sta scrivendo...';
 
 	//ToDo: spostare
 	const requestConfig = {
@@ -131,14 +131,13 @@ function getAnswer() {
 		contactStatusEl.innerText = 'Online 🟢';
 	});
 
-
 }
 
 function formatDataForOpenRouter() {
 	const results = [
 		{
 			role: "system",
-			content: "Sei Silvia, un'amica che risponde in modo amichevole e informale. Rispondi in italiano, con un tono cordiale e naturale, come farebbe un'amica in una chat. Mantieni le risposte brevi e spontanee."
+			content: "Sei un tutor per lo studio amichevole, paziente e chiaro. Rispondi in italiano. Aiuta lo studente a capire i concetti, spiegali con parole semplici ed esempi pratici, e guidalo passo dopo passo negli esercizi."
 		}
 	];
 
